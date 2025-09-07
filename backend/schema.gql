@@ -1,0 +1,615 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AIStatsResponse {
+  average_answer_confidence: Float!
+  average_search_relevance: Float!
+  cost_today: Float!
+  tokens_consumed_today: Int!
+  total_answers_generated: Int!
+  total_expert_routings: Int!
+  total_searches_performed: Int!
+}
+
+type Answer {
+  ai_confidence: Float
+  author: User!
+  content: String!
+  created_at: DateTime!
+  downvotes: Int!
+  id: ID!
+  is_accepted: Boolean!
+  is_ai_generated: Boolean!
+  quality_score: Float!
+  question: Question!
+  score: Float!
+  updated_at: DateTime!
+  upvotes: Int!
+  votes: [Vote!]!
+}
+
+type AnswerSource {
+  author: String
+  content_preview: String
+  id: String!
+  similarity: Float!
+  title: String!
+  type: String!
+}
+
+type AuthResponse {
+  access_token: String!
+  expires_in: Float!
+  refresh_token: String!
+  user: UserResponse!
+}
+
+input ChangePasswordDto {
+  current_password: String!
+  new_password: String!
+}
+
+input ConfirmEscrowPaymentDto {
+  escrow_id: String!
+  payment_intent_id: String!
+}
+
+input CreateAnswerDto {
+  content: String!
+  question_id: String!
+}
+
+input CreateEscrowDto {
+  amount: Float!
+  auto_release_days: Int
+  currency: String! = "USD"
+  description: String
+  payee_id: String
+  question_id: String
+}
+
+input CreateGroupDto {
+  category: String!
+  description: String!
+  name: String!
+}
+
+input CreatePaymentIntentDto {
+  amount: Float!
+  currency: String! = "USD"
+  question_id: String
+}
+
+input CreateQuestionDto {
+  bounty_amount: Int
+  content: String!
+  is_urgent: Boolean
+  priority_level: Int
+  tags: [String!]
+  target_group_id: String
+  title: String!
+}
+
+input CreateUserDto {
+  email: String!
+  full_name: String
+  password: String!
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input Disable2FADto {
+  totp_code: String!
+}
+
+input DisputeEscrowDto {
+  escrow_id: String!
+  reason: String!
+}
+
+type EmbeddingResponse {
+  dimensions: Int!
+  embedding: [Float!]!
+  model: String!
+}
+
+type Enable2FADto {
+  backup_codes: [String!]!
+  qr_code_url: String!
+  secret: String!
+}
+
+type EscrowStatsResponse {
+  disputed_escrows: Int!
+  held_escrows: Int!
+  released_escrows: Int!
+  total_amount_held: Float!
+  total_amount_released: Float!
+  total_escrows: Int!
+  total_platform_fees: Float!
+}
+
+"""The status of an escrow transaction"""
+enum EscrowStatus {
+  DISPUTED
+  EXPIRED
+  HELD
+  PENDING
+  REFUNDED
+  RELEASED
+}
+
+type EscrowTransaction {
+  amount: Int!
+  auto_release_at: DateTime
+  canDispute: Boolean!
+  canRefund: Boolean!
+  canRelease: Boolean!
+  created_at: DateTime!
+  currency: String!
+  description: String
+  dispute_reason: String
+  disputed_at: DateTime
+  held_at: DateTime
+  id: ID!
+  isExpiringSoon: Boolean!
+  payee: User
+  payeeAmount: Float!
+  payer: User!
+  platformFeeAmount: Float!
+  platform_fee: Int!
+  question: Question!
+  refund_reason: String
+  refunded_at: DateTime
+  release_reason: String
+  released_at: DateTime
+  status: String!
+  stripe_refund_id: String
+  timeUntilAutoRelease: String
+}
+
+type ExpertMatch {
+  avatar_url: String
+  average_response_time_hours: Float
+  expertise_level: Int
+  full_name: String
+  group_name: String
+  is_available: Boolean!
+  match_reasons: [String!]!
+  match_score: Float!
+  reputation_score: Int!
+  response_rate: Float
+  user_id: String!
+  username: String!
+}
+
+input ExpertRoutingDto {
+  max_experts: Int
+  min_expertise_level: Int
+  min_similarity_threshold: Float
+  question_id: String!
+}
+
+type ExpertRoutingResult {
+  experts: [ExpertMatch!]!
+  routing_confidence: Float!
+  routing_reason: String!
+  total_candidates_evaluated: Int!
+}
+
+input GenerateAnswerDto {
+  additional_context: String
+  max_tokens: Int
+  question_id: String!
+  temperature: Float
+}
+
+type GeneratedAnswerResponse {
+  answer: String!
+  confidence: Float!
+  model_used: String!
+  sources: [AnswerSource!]!
+  tokens_used: Int!
+}
+
+input GoogleLoginDto {
+  token: String!
+}
+
+type Group {
+  category: String
+  created_at: DateTime!
+  created_by: User!
+  description: String
+  experts: [User!]!
+  id: ID!
+  is_active: Boolean!
+  is_private: Boolean!
+  member_count: Int!
+  members: [User!]!
+  name: String!
+  questions: [Question!]!
+}
+
+type GroupMemberResponse {
+  avatar_url: String
+  expertise_level: Int!
+  full_name: String
+  id: String!
+  is_moderator: Boolean!
+  joined_at: DateTime!
+  reputation_score: Int!
+  username: String!
+}
+
+input JoinGroupDto {
+  expertise_level: Int
+}
+
+input LoginDto {
+  identifier: String!
+  password: String!
+  totp_code: String
+}
+
+type MessageResponse {
+  message: String!
+  success: Boolean!
+}
+
+type Mutation {
+  acceptAnswer(answerId: String!): Answer!
+  activateUser(userId: String!): MessageResponse!
+  assessContentQuality(content: String!, type: String!): Float!
+  changePassword(input: ChangePasswordDto!): MessageResponse!
+  confirmEscrowPayment(input: ConfirmEscrowPaymentDto!): EscrowTransaction!
+  createAnswer(input: CreateAnswerDto!): Answer!
+  createEscrow(input: CreateEscrowDto!): EscrowTransaction!
+  createGroup(input: CreateGroupDto!): Group!
+  createPaymentIntent(input: CreatePaymentIntentDto!): PaymentIntentResponse!
+  createQuestion(input: CreateQuestionDto!): Question!
+  createStripeConnectAccount: StripeConnectResponse!
+  deactivateUser(userId: String!): MessageResponse!
+  deleteAnswer(id: String!): MessageResponse!
+  deleteQuestion(id: String!): MessageResponse!
+  disable2FA(input: Disable2FADto!): MessageResponse!
+  disputeEscrow(input: DisputeEscrowDto!): EscrowTransaction!
+  enable2FA: Enable2FADto!
+  extractTags(content: String!, maxTags: Float! = 5): [String!]!
+  generateAnswer(input: GenerateAnswerDto!): GeneratedAnswerResponse!
+  generateEmbedding(text: String!): EmbeddingResponse!
+  googleLogin(input: GoogleLoginDto!): AuthResponse!
+  joinGroup(groupId: String!, input: JoinGroupDto!): UserGroupMembership!
+  leaveGroup(groupId: String!): MessageResponse!
+  login(input: LoginDto!): AuthResponse!
+  logout: MessageResponse!
+  refreshToken(input: RefreshTokenDto!): AuthResponse!
+  refundEscrow(input: RefundEscrowDto!): EscrowTransaction!
+  register(input: CreateUserDto!): AuthResponse!
+  releaseEscrow(input: ReleaseEscrowDto!): EscrowTransaction!
+  routeToExperts(input: ExpertRoutingDto!): ExpertRoutingResult!
+  translateContent(content: String!, targetLanguage: String!): String!
+  updateAnswer(id: String!, input: UpdateAnswerDto!): Answer!
+  updateGroup(groupId: String!, input: UpdateGroupDto!): Group!
+  updateMembership(expertiseLevel: Float, groupId: String!, isModerator: Boolean, userId: String!): UserGroupMembership!
+  updateProfile(input: UpdateUserProfileDto!): User!
+  updateQuestion(id: String!, input: UpdateQuestionDto!): Question!
+  updateQuestionStatus(id: String!, status: QuestionStatus!): Question!
+  updateUserReputation(points: Float!, reason: String!, userId: String!): User!
+  verify2FA(input: Verify2FADto!): MessageResponse!
+  voteAnswer(answerId: String!, voteType: String!): Vote
+  voteQuestion(questionId: String!, voteType: String!): Vote
+}
+
+type PaymentIntentResponse {
+  amount: Float!
+  client_secret: String!
+  currency: String!
+  payment_intent_id: String!
+}
+
+type Query {
+  aiStats: AIStatsResponse!
+  answer(id: String!): Answer!
+  answersByQuestion(questionId: String!): [Answer!]!
+  escrow(id: String!): EscrowTransaction!
+  escrowStats: EscrowStatsResponse!
+  escrowsByQuestion(questionId: String!): [EscrowTransaction!]!
+  findSimilarContent(input: SimilarContentDto!): SimilarContentResult!
+  group(id: String!): Group!
+  groupExperts(groupId: String!, minExpertiseLevel: Float): [User!]!
+  groupMembers(groupId: String!, limit: Int): [GroupMemberResponse!]!
+  groups(active: Boolean): [Group!]!
+  highBountyQuestions(limit: Int): [Question!]!
+  me: UserResponse!
+  myAnswers(limit: Int, page: Int): [Answer!]!
+  myEscrows(status: EscrowStatus): [EscrowTransaction!]!
+  myMemberships: [UserMembershipResponse!]!
+  myQuestions(limit: Int, page: Int): [Question!]!
+  question(id: String!): Question!
+  questionVotes(questionId: String!): QuestionVotesResponse!
+  questions(filters: QuestionFilterDto, groupId: String, skip: Int, status: String, take: Int): [Question!]!
+  questionsByGroup(groupId: String!, limit: Int, page: Int): [Question!]!
+  questionsByUser(limit: Int, page: Int, userId: String!): [Question!]!
+  recommendedQuestions(limit: Int): [Question!]!
+  searchGroups(input: SearchGroupsDto!): [Group!]!
+  searchQuestions(input: SearchQuestionsDto!): [Question!]!
+  searchUsers(input: SearchUsersDto!): [User!]!
+  semanticSearch(input: SemanticSearchDto!): [SemanticSearchResult!]!
+  stripeConnectStatus: StripeConnectStatusResponse!
+  suggestQuestions(partialQuery: String!): [String!]!
+  topUsers(limit: Int): [User!]!
+  trendingQuestions(limit: Int): [Question!]!
+  unansweredQuestions(limit: Int): [Question!]!
+  user(id: String!): User!
+  userByUsername(username: String!): User
+  userStats(userId: String): UserStatsResponse!
+}
+
+type Question {
+  _count: QuestionCounts!
+  acceptedAnswerId: String
+  accepted_answer: Answer
+  answerCount: Float!
+  answers: [Answer!]!
+  author: User!
+  bountyAmount: Float!
+  bounty_amount: Int!
+  canDelete: Boolean!
+  canEdit: Boolean!
+  content: String!
+  createdAt: DateTime!
+  created_at: DateTime!
+  downvotes: Int!
+  group: Group
+  hasAcceptedAnswer: Boolean!
+  id: ID!
+  is_urgent: Boolean!
+  priority_level: Int
+  score: Float!
+  sla_deadline: DateTime
+  status: String!
+  tags: [String!]!
+  target_group: Group
+  title: String!
+  updatedAt: DateTime!
+  updated_at: DateTime!
+  upvotes: Int!
+  userVote: String
+  viewCount: Float!
+  view_count: Int!
+  votes: [Vote!]!
+}
+
+type QuestionCounts {
+  answers: Int!
+  votes: Int!
+}
+
+input QuestionFilterDto {
+  author_id: String
+  groupId: String
+  has_bounty: Boolean
+  is_urgent: Boolean
+  limit: Int
+  min_bounty: Int
+  page: Int
+  search_query: String
+  skip: Int
+  sort_by: String
+  sort_order: String
+  status: QuestionStatus
+  tags: [String!]
+  take: Int
+  target_group_id: String
+}
+
+"""The status of a question"""
+enum QuestionStatus {
+  CLOSED
+  IN_PROGRESS
+  OPEN
+  RESOLVED
+}
+
+type QuestionVotesResponse {
+  downvotes: Int!
+  upvotes: Int!
+  user_vote: String
+}
+
+input RefreshTokenDto {
+  refresh_token: String!
+}
+
+input RefundEscrowDto {
+  escrow_id: String!
+  reason: String!
+}
+
+input ReleaseEscrowDto {
+  escrow_id: String!
+  reason: String
+}
+
+input SearchGroupsDto {
+  limit: Int
+  query: String!
+}
+
+input SearchQuestionsDto {
+  limit: Int
+  query: String!
+}
+
+"""The type of content to search for"""
+enum SearchType {
+  ALL
+  ANSWERS
+  QUESTIONS
+}
+
+input SearchUsersDto {
+  limit: Int
+  query: String!
+}
+
+input SemanticSearchDto {
+  group_id: String
+  limit: Int
+  min_similarity: Float
+  query: String!
+  search_type: SearchType! = ALL
+}
+
+type SemanticSearchResult {
+  author: String
+  content: String!
+  group: String
+  id: String!
+  quality_score: Float
+  similarity: Float!
+  title: String!
+  type: String!
+  url: String
+}
+
+input SimilarContentDto {
+  content_id: String!
+  content_type: String!
+  limit: Int
+}
+
+type SimilarContentResult {
+  max_similarity: Float!
+  similar_answers: [SemanticSearchResult!]!
+  similar_questions: [SemanticSearchResult!]!
+  total_found: Int!
+}
+
+type StripeConnectResponse {
+  account_id: String!
+  onboarding_url: String!
+}
+
+type StripeConnectStatusResponse {
+  account_id: String
+  charges_enabled: Boolean!
+  details_submitted: Boolean!
+  is_onboarded: Boolean!
+}
+
+input UpdateAnswerDto {
+  content: String
+}
+
+input UpdateGroupDto {
+  category: String
+  description: String
+  is_active: Boolean
+  name: String
+}
+
+input UpdateQuestionDto {
+  bounty_amount: Int
+  content: String
+  is_urgent: Boolean
+  priority_level: Int
+  status: QuestionStatus
+  tags: [String!]
+  target_group_id: String
+  title: String
+}
+
+input UpdateUserProfileDto {
+  avatar_url: String
+  bio: String
+  full_name: String
+  username: String
+}
+
+type User {
+  answers: [Answer!]!
+  avatar: String
+  avatar_url: String
+  bio: String
+  created_at: DateTime!
+  email: String!
+  email_verified: Boolean!
+  full_name: String
+  groups: [Group!]!
+  id: ID!
+  is_active: Boolean!
+  memberships: [UserGroupMembership!]!
+  name: String!
+  questions: [Question!]!
+  reputation: Float!
+  reputation_score: Int!
+  role: String!
+  two_factor_enabled: Boolean!
+  updated_at: DateTime!
+  username: String!
+}
+
+type UserGroupMembership {
+  expertise_level: Int!
+  group: Group!
+  id: ID!
+  is_active: Boolean!
+  is_moderator: Boolean!
+  joined_at: DateTime!
+  role: String!
+  user: User!
+}
+
+type UserMembershipResponse {
+  expertise_level: Int!
+  group_description: String!
+  group_id: String!
+  group_name: String!
+  is_moderator: Boolean!
+  joined_at: DateTime!
+}
+
+type UserResponse {
+  avatar_url: String
+  bio: String
+  created_at: DateTime!
+  email: String!
+  email_verified: Boolean!
+  full_name: String
+  id: String!
+  is_active: Boolean!
+  reputation_score: Float!
+  two_factor_enabled: Boolean
+  updated_at: DateTime!
+  username: String!
+}
+
+type UserStatsResponse {
+  group_memberships: Int!
+  member_since: DateTime!
+  reputation_score: Int!
+  total_answers: Int!
+  total_questions: Int!
+  total_votes: Int!
+}
+
+input Verify2FADto {
+  totp_code: String!
+}
+
+type Vote {
+  answer: Answer
+  created_at: DateTime!
+  id: ID!
+  question: Question
+  user: User!
+  voteType: String!
+  vote_type: String!
+}

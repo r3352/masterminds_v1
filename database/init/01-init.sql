@@ -18,7 +18,14 @@ CREATE TABLE users (
     is_active BOOLEAN DEFAULT true,
     email_verified BOOLEAN DEFAULT false,
     stripe_customer_id VARCHAR(255),
-    stripe_connect_account_id VARCHAR(255)
+    stripe_connect_account_id VARCHAR(255),
+    google_id VARCHAR(255),
+    two_factor_secret VARCHAR(255),
+    two_factor_secret_temp VARCHAR(255),
+    two_factor_enabled BOOLEAN DEFAULT false,
+    last_login TIMESTAMP,
+    password_reset_token VARCHAR(255),
+    password_reset_expires TIMESTAMP
 );
 
 -- Groups table with semantic routing capabilities  

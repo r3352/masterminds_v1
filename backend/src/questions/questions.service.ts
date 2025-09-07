@@ -57,8 +57,12 @@ export class QuestionsService {
     const contentForEmbedding = `${createQuestionDto.title} ${createQuestionDto.content}`;
     const embedding = await this.generateEmbedding(contentForEmbedding);
 
+    // Handle both camelCase and snake_case bounty amount
+    const bountyAmount = createQuestionDto.bountyAmount || createQuestionDto.bounty_amount;
+
     const question = this.questionRepository.create({
       ...createQuestionDto,
+      bounty_amount: bountyAmount,
       author,
       target_group: targetGroup,
       content_embedding: embedding,

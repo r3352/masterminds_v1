@@ -29,6 +29,39 @@ export class UpdateUserProfileDto {
 }
 
 @InputType()
+export class UpdateSettingsDto {
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  email_notifications?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  push_notifications?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  privacy_public_profile?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsBoolean()
+  privacy_show_email?: boolean;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  preferred_language?: string;
+
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  timezone?: string;
+}
+
+@InputType()
 export class CreateGroupDto {
   @Field()
   @IsString()

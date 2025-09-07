@@ -11,6 +11,7 @@ import { Group } from './entities/group.entity';
 import { UserGroupMembership } from './entities/user-group-membership.entity';
 import {
   UpdateUserProfileDto,
+  UpdateSettingsDto,
   CreateGroupDto,
   UpdateGroupDto,
   JoinGroupDto,
@@ -67,6 +68,12 @@ export class UsersResolver {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Query(() => User)
+  async profile(@CurrentUser() user: User): Promise<User> {
+    return this.usersService.findById(user.id);
+  }
+
   // User Mutations
   @UseGuards(JwtAuthGuard)
   @Mutation(() => User)
@@ -75,6 +82,15 @@ export class UsersResolver {
     @Args('input', ValidationPipe) updateData: UpdateUserProfileDto,
   ): Promise<User> {
     return this.usersService.updateProfile(user.id, updateData);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => User) 
+  async updateSettings(
+    @CurrentUser() user: User,
+    @Args('input') settingsDto: UpdateSettingsDto,
+  ): Promise<User> {
+    return this.usersService.updateSettings(user.id, settingsDto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -142,8 +158,12 @@ export class GroupsResolver {
   // Group Queries
   @Public()
   @Query(() => [Group])
-  async groups(@Args('active', { nullable: true }) active?: boolean): Promise<Group[]> {
-    return this.usersService.findAllGroups(active);
+  async groups(
+    @Args('active', { nullable: true }) active?: boolean,
+    @Args('skip', { type: () => Int, nullable: true }) skip?: number,
+    @Args('take', { type: () => Int, nullable: true }) take?: number,
+  ): Promise<Group[]> {
+    return this.usersService.findAllGroups(active, skip, take);
   }
 
   @Public()
@@ -263,6 +283,18 @@ export class GroupsResolver {
   @ResolveField(() => [User])
   async experts(@Parent() group: Group): Promise<User[]> {
     return this.usersService.findExpertsByGroup(group.id, 3);
+  }
+
+  @ResolveField(() => Int, { name: 'expertiseLevel' })
+  async expertiseLevel(@Parent() group: Group, @CurrentUser() user?: User): Promise<number> {
+    if (!user) return 0;
+    const membership = await this.usersService.getUserGroupMembership(user.id, group.id);
+    return membership?.expertise_level || 0;
+  }
+
+  @ResolveField(() => Int, { name: 'questionCount' })
+  async questionCount(@Parent() group: Group): Promise<number> {
+    return this.usersService.getGroupQuestionCount(group.id);
   }
 }
 

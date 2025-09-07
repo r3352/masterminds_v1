@@ -6,11 +6,11 @@ WORKDIR /app
 # Install curl for health checks
 RUN apk add --no-cache curl
 
-# Copy package files
-COPY package.json ./
+# Copy package files first (for better layer caching)
+COPY package.json package-lock.json ./
 
-# Install all dependencies
-RUN npm install
+# Install all dependencies (bcryptjs is pure JS, no compilation needed)
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -22,5 +22,5 @@ EXPOSE 3001
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:3001/api/health || exit 1
 
-# Start the development server (since we have build issues, let's run in dev mode for demo)
+# Start the development server
 CMD ["npm", "run", "start:dev"]

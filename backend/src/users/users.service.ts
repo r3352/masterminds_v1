@@ -4,7 +4,7 @@ import { Repository, Like, In } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Group } from './entities/group.entity';
 import { UserGroupMembership } from './entities/user-group-membership.entity';
-import { CreateGroupDto, UpdateUserProfileDto, JoinGroupDto } from './dto/users.dto';
+import { CreateGroupDto, UpdateUserProfileDto, UpdateSettingsDto, JoinGroupDto } from './dto/users.dto';
 
 @Injectable()
 export class UsersService {
@@ -56,6 +56,12 @@ export class UsersService {
     }
 
     Object.assign(user, updateData);
+    return this.userRepository.save(user);
+  }
+
+  async updateSettings(userId: string, settingsData: UpdateSettingsDto): Promise<User> {
+    const user = await this.findById(userId);
+    Object.assign(user, settingsData);
     return this.userRepository.save(user);
   }
 
@@ -119,11 +125,13 @@ export class UsersService {
     return savedGroup;
   }
 
-  async findAllGroups(isActive?: boolean): Promise<Group[]> {
+  async findAllGroups(isActive?: boolean, skip?: number, take?: number): Promise<Group[]> {
     const where = isActive !== undefined ? { is_active: isActive } : {};
     return this.groupRepository.find({
       where,
       order: { member_count: 'DESC' },
+      skip,
+      take,
     });
   }
 
@@ -289,5 +297,17 @@ export class UsersService {
       group_memberships: user.group_memberships?.length || 0,
       reputation_score: user.reputation_score,
     };
+  }
+
+  async getUserGroupMembership(userId: string, groupId: string): Promise<UserGroupMembership | null> {
+    return this.membershipRepository.findOne({
+      where: { user_id: userId, group_id: groupId },
+    });
+  }
+
+  async getGroupQuestionCount(groupId: string): Promise<number> {
+    // This would need to be implemented based on your questions entity
+    // For now, return 0 as a placeholder
+    return 0;
   }
 }

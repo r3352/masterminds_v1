@@ -8,6 +8,7 @@ import { Answer } from './entities/answer.entity';
 import { User } from '../users/entities/user.entity';
 import { Vote } from '../common/entities/vote.entity';
 import { CreateAnswerDto, UpdateAnswerDto } from './dto/answers.dto';
+import { AnswerCountDto } from './dto/count.dto';
 import { MessageResponse } from '../auth/dto/auth.dto';
 
 @Resolver(() => Answer)
@@ -97,5 +98,13 @@ export class AnswersResolver {
   @ResolveField(() => [Vote], { name: 'votes' })
   async votesList(@Parent() answer: Answer): Promise<Vote[]> {
     return answer.votes || [];
+  }
+
+  @ResolveField(() => AnswerCountDto, { name: '_count' })
+  async count(@Parent() answer: Answer): Promise<AnswerCountDto> {
+    const votesCount = answer.votes ? answer.votes.length : 0;
+    return {
+      votes: votesCount,
+    };
   }
 }

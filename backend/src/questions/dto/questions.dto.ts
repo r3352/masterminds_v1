@@ -45,6 +45,13 @@ export class CreateQuestionDto {
   @Max(10000)
   bounty_amount?: number;
 
+  @Field(() => Int, { nullable: true, name: 'bountyAmount' })
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  @Max(10000)
+  bountyAmount?: number;
+
   @Field(() => Int, { nullable: true })
   @IsOptional()
   @IsNumber()

@@ -13,20 +13,29 @@ type AIStatsResponse {
 }
 
 type Answer {
+  _count: AnswerCountDto!
   ai_confidence: Float
   author: User!
   content: String!
+  createdAt: DateTime!
   created_at: DateTime!
   downvotes: Int!
   id: ID!
+  isAccepted: Boolean!
   is_accepted: Boolean!
   is_ai_generated: Boolean!
+  qualityScore: Float!
   quality_score: Float!
   question: Question!
   score: Float!
+  updatedAt: DateTime!
   updated_at: DateTime!
   upvotes: Int!
   votes: [Vote!]!
+}
+
+type AnswerCountDto {
+  votes: Int!
 }
 
 type AnswerSource {
@@ -82,6 +91,7 @@ input CreatePaymentIntentDto {
 }
 
 input CreateQuestionDto {
+  bountyAmount: Int
   bounty_amount: Int
   content: String!
   is_urgent: Boolean
@@ -223,16 +233,22 @@ input GoogleLoginDto {
 
 type Group {
   category: String
+  createdAt: DateTime!
   created_at: DateTime!
   created_by: User!
+  creator: User!
   description: String
+  expertiseLevel: Int!
   experts: [User!]!
   id: ID!
+  isPublic: Boolean!
   is_active: Boolean!
   is_private: Boolean!
+  memberCount: Int!
   member_count: Int!
   members: [User!]!
   name: String!
+  questionCount: Int!
   questions: [Question!]!
 }
 
@@ -300,6 +316,7 @@ type Mutation {
   updateProfile(input: UpdateUserProfileDto!): User!
   updateQuestion(id: String!, input: UpdateQuestionDto!): Question!
   updateQuestionStatus(id: String!, status: QuestionStatus!): Question!
+  updateSettings(input: UpdateSettingsDto!): User!
   updateUserReputation(points: Float!, reason: String!, userId: String!): User!
   verify2FA(input: Verify2FADto!): MessageResponse!
   voteAnswer(answerId: String!, voteType: String!): Vote
@@ -324,19 +341,21 @@ type Query {
   group(id: String!): Group!
   groupExperts(groupId: String!, minExpertiseLevel: Float): [User!]!
   groupMembers(groupId: String!, limit: Int): [GroupMemberResponse!]!
-  groups(active: Boolean): [Group!]!
+  groups(active: Boolean, skip: Int, take: Int): [Group!]!
   highBountyQuestions(limit: Int): [Question!]!
   me: UserResponse!
   myAnswers(limit: Int, page: Int): [Answer!]!
   myEscrows(status: EscrowStatus): [EscrowTransaction!]!
   myMemberships: [UserMembershipResponse!]!
   myQuestions(limit: Int, page: Int): [Question!]!
+  profile: User!
   question(id: String!): Question!
   questionVotes(questionId: String!): QuestionVotesResponse!
   questions(filters: QuestionFilterDto, groupId: String, skip: Int, status: String, take: Int): [Question!]!
   questionsByGroup(groupId: String!, limit: Int, page: Int): [Question!]!
   questionsByUser(limit: Int, page: Int, userId: String!): [Question!]!
   recommendedQuestions(limit: Int): [Question!]!
+  search(query: String!, type: String): SearchResultsDto!
   searchGroups(input: SearchGroupsDto!): [Group!]!
   searchQuestions(input: SearchQuestionsDto!): [Question!]!
   searchUsers(input: SearchUsersDto!): [User!]!
@@ -447,6 +466,13 @@ input SearchQuestionsDto {
   query: String!
 }
 
+type SearchResultsDto {
+  answers: [Answer!]
+  groups: [Group!]
+  questions: [Question!]
+  users: [User!]
+}
+
 """The type of content to search for"""
 enum SearchType {
   ALL
@@ -524,6 +550,15 @@ input UpdateQuestionDto {
   tags: [String!]
   target_group_id: String
   title: String
+}
+
+input UpdateSettingsDto {
+  email_notifications: Boolean
+  preferred_language: String
+  privacy_public_profile: Boolean
+  privacy_show_email: Boolean
+  push_notifications: Boolean
+  timezone: String
 }
 
 input UpdateUserProfileDto {

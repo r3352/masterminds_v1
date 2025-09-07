@@ -70,4 +70,25 @@ export class Answer {
   @Field(() => [Vote])
   @OneToMany(() => Vote, vote => vote.answer)
   votes: Vote[];
+
+  // Field resolvers for frontend compatibility (camelCase fields)
+  @Field({ name: 'isAccepted' })
+  get isAccepted(): boolean {
+    return this.is_accepted;
+  }
+
+  @Field(() => Float, { name: 'qualityScore' })
+  get qualityScore(): number {
+    return this.quality_score;
+  }
+
+  @Field({ name: 'createdAt' })
+  get createdAt(): Date {
+    return this.created_at;
+  }
+
+  @Field({ name: 'updatedAt' })
+  get updatedAt(): Date {
+    return this.updated_at;
+  }
 }

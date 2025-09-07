@@ -68,4 +68,25 @@ export class Group {
   @Field(() => [User])
   @ManyToMany(() => User, user => user.groups)
   members: User[];
+
+  // Field resolvers for frontend compatibility
+  @Field({ name: 'isPublic' })
+  get isPublic(): boolean {
+    return !this.is_private;
+  }
+
+  @Field(() => Int, { name: 'memberCount' })
+  get memberCount(): number {
+    return this.member_count;
+  }
+
+  @Field({ name: 'createdAt' })
+  get createdAt(): Date {
+    return this.created_at;
+  }
+
+  @Field(() => User, { name: 'creator' })
+  get creator(): User {
+    return this.created_by;
+  }
 }

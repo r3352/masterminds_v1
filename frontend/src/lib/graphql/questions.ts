@@ -107,8 +107,8 @@ export const GET_QUESTION = gql`
 `;
 
 export const CREATE_QUESTION = gql`
-  mutation CreateQuestion($createQuestionDto: CreateQuestionDto!) {
-    createQuestion(createQuestionDto: $createQuestionDto) {
+  mutation CreateQuestion($input: CreateQuestionDto!) {
+    createQuestion(input: $input) {
       id
       title
       content
@@ -128,8 +128,8 @@ export const CREATE_QUESTION = gql`
 `;
 
 export const UPDATE_QUESTION = gql`
-  mutation UpdateQuestion($id: String!, $updateQuestionDto: UpdateQuestionDto!) {
-    updateQuestion(id: $id, updateQuestionDto: $updateQuestionDto) {
+  mutation UpdateQuestion($id: String!, $input: UpdateQuestionDto!) {
+    updateQuestion(id: $id, input: $input) {
       id
       title
       content

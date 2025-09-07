@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_ANSWER = gql`
-  mutation CreateAnswer($createAnswerDto: CreateAnswerDto!) {
-    createAnswer(createAnswerDto: $createAnswerDto) {
+  mutation CreateAnswer($input: CreateAnswerDto!) {
+    createAnswer(input: $input) {
       id
       content
       qualityScore
@@ -24,8 +24,8 @@ export const CREATE_ANSWER = gql`
 `;
 
 export const UPDATE_ANSWER = gql`
-  mutation UpdateAnswer($id: String!, $updateAnswerDto: UpdateAnswerDto!) {
-    updateAnswer(id: $id, updateAnswerDto: $updateAnswerDto) {
+  mutation UpdateAnswer($id: String!, $input: UpdateAnswerDto!) {
+    updateAnswer(id: $id, input: $input) {
       id
       content
       qualityScore

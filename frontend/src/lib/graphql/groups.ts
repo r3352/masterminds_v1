@@ -53,8 +53,8 @@ export const GET_GROUP = gql`
 `;
 
 export const JOIN_GROUP = gql`
-  mutation JoinGroup($groupId: String!, $expertiseLevel: ExpertiseLevel!) {
-    joinGroup(groupId: $groupId, expertiseLevel: $expertiseLevel) {
+  mutation JoinGroup($groupId: String!, $input: JoinGroupDto!) {
+    joinGroup(groupId: $groupId, input: $input) {
       id
       role
       expertiseLevel

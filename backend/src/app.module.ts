@@ -17,6 +17,8 @@ import { PaymentsModule } from './payments/payments.module';
 import { ReputationModule } from './reputation/reputation.module';
 import { AiModule } from './ai/ai.module';
 import { WebSocketsModule } from './websockets/websockets.module';
+import { HealthModule } from './health/health.module';
+import { SearchModule } from './search/search.module';
 
 // Import entities
 import { User } from './users/entities/user.entity';
@@ -79,8 +81,17 @@ import { AppService } from './app.service';
             configService.get('FRONTEND_URL') || 'http://localhost:10021',
             'http://localhost:3000',
             'http://localhost:10021',
+            'http://localhost:10022',
+            'http://localhost:10023',
+            'http://localhost:10024',
             'http://127.0.0.1:10021',
+            'http://127.0.0.1:10022',
+            'http://127.0.0.1:10023',
+            'http://127.0.0.1:10024',
             'http://[::1]:10021',
+            'http://[::1]:10022',
+            'http://[::1]:10023',
+            'http://[::1]:10024',
           ],
           credentials: true,
           methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'],
@@ -142,6 +153,8 @@ import { AppService } from './app.service';
     ReputationModule,
     AiModule,
     WebSocketsModule,
+    HealthModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

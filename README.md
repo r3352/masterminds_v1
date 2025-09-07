@@ -1,434 +1,239 @@
-# Masterminds Q&A Platform
+# Kondon - Expert Q&A Platform
 
-A production-ready Q&A platform with expert routing, bounty payments, AI-powered answers, and real-time features.
+A comprehensive Q&A platform where experts can answer questions, users can set bounties, and AI provides fallback answers when no expert responds within the SLA timeframe.
 
-## 🏗️ Architecture Overview
+## 🚀 Quick Start (Recommended)
 
-### Backend (NestJS)
-- **Framework**: NestJS with TypeScript
-- **Database**: PostgreSQL with pgvector extension for embeddings
-- **API**: GraphQL with Apollo Server
-- **Authentication**: JWT with 2FA support
-- **Payment**: Stripe integration with escrow system
-- **Real-time**: Socket.IO WebSocket gateway
-- **AI**: OpenAI integration for embeddings and answer generation
-- **Cache**: Redis for session management
+The easiest way to run this system is using the provided batch files:
 
-### Frontend (Next.js)
-- **Framework**: Next.js 14 with App Router
-- **UI**: React 18 + TypeScript + Tailwind CSS
-- **Components**: Radix UI primitives with custom styling
-- **GraphQL**: Apollo Client for API communication
-- **Real-time**: Socket.IO client integration
+### For Windows Users:
+1. **Install Docker Desktop**
+   - Download from: https://www.docker.com/products/docker-desktop
+   - Install and make sure it's running
 
-## 🚀 Features Implemented
+2. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd kondon
+   ```
 
-### ✅ Phase 1: Foundation Setup
-- **Database & Migration Agent**
-  - TypeORM configuration with PostgreSQL + pgvector
-  - Entity relationships and migrations
-  - Comprehensive database seeder with realistic test data
-  - Support for vector embeddings storage
+3. **Start the system**
+   - Double-click `start.bat` or run it from command line
+   - Wait for all services to start (this may take a few minutes on first run)
 
-- **Authentication & Security Agent**
-  - JWT-based authentication with refresh tokens
-  - Two-factor authentication (2FA) with TOTP
-  - Google OAuth integration
-  - Role-based access control (User, Expert, Moderator, Admin)
-  - Password strength validation and secure hashing
-  - Session management with Redis
+4. **Stop the system**
+   - Double-click `stop.bat` when you're done
 
-### ✅ Phase 2: Core Services
-- **Backend Core Services Agent**
-  - Users & Groups management with expertise levels
-  - Questions lifecycle with status management
-  - Answers with acceptance and quality scoring
-  - Voting system for questions and answers
-  - Reputation system with point tracking
-  - Comprehensive GraphQL API with resolvers
+### For Mac/Linux Users:
+1. **Install Docker**
+   - **Mac**: Download Docker Desktop from https://www.docker.com/products/docker-desktop
+   - **Linux**: Install Docker Engine and Docker Compose
+   
+2. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd kondon
+   ```
 
-- **Payment & Escrow Agent**
-  - Stripe payment intent creation
-  - Escrow system for bounty payments
-  - Stripe Connect for expert payouts
-  - Automated escrow release/refund logic
-  - Webhook handling for payment events
-  - Platform fee calculation (5%)
+3. **Start the system**
+   ```bash
+   chmod +x start.sh stop.sh  # Make scripts executable (first time only)
+   ./start.sh
+   ```
 
-### ✅ Phase 3: Intelligence Layer
-- **AI & Search Agent**
-  - OpenAI integration for answer generation
-  - Semantic search with vector embeddings
-  - Expert routing based on similarity matching
-  - Content quality assessment
-  - Automated tag extraction
-  - Similar content discovery
+4. **Stop the system**
+   ```bash
+   ./stop.sh
+   ```
 
-### ✅ Phase 4: Real-time Features
-- **WebSocket Gateway**
-  - Real-time notifications for all major events
-  - Live user presence tracking
-  - Question viewer tracking
-  - Typing indicators
-  - Expert routing notifications
-  - Payment completion alerts
+### Services will be available at:
+- **Frontend (Main App)**: http://localhost:10021
+- **Backend API**: http://localhost:3001
+- **PostgreSQL Database**: localhost:5433
+- **Redis**: localhost:6379
 
-## 🛠️ Technology Stack
+## 📋 Prerequisites
 
-### Backend Dependencies
-```json
-{
-  "@nestjs/common": "^10.0.0",
-  "@nestjs/graphql": "^12.0.0",
-  "@nestjs/typeorm": "^10.0.0",
-  "@nestjs/jwt": "^10.0.0",
-  "@nestjs/websockets": "^10.0.0",
-  "typeorm": "^0.3.17",
-  "pg": "^8.11.0",
-  "redis": "^4.6.0",
-  "stripe": "^14.9.0",
-  "openai": "^4.0.0",
-  "socket.io": "^4.7.0",
-  "bcrypt": "^5.1.0",
-  "speakeasy": "^2.0.0",
-  "google-auth-library": "^9.2.0"
-}
-```
+### Required Software:
+- **Docker Desktop** (latest version) - **REQUIRED**
+- **Git** (for cloning the repository)
 
-### Frontend Dependencies
-```json
-{
-  "next": "14.0.0",
-  "react": "^18.2.0",
-  "@apollo/client": "^3.8.0",
-  "tailwindcss": "^3.3.0",
-  "@radix-ui/react-slot": "^1.2.3",
-  "lucide-react": "^0.292.0"
-}
-```
+### System Requirements:
+- **RAM**: 4GB minimum, 8GB recommended
+- **Storage**: 2GB free space for Docker images
+- **OS**: Windows 10/11, macOS, or Linux
 
-## 🏃‍♂️ Getting Started
+## 🏗️ System Architecture
 
-### Prerequisites
-- Node.js 18+ and npm
-- PostgreSQL with pgvector extension
-- Redis server
-- Docker (optional)
+This system consists of multiple containerized services:
 
-### Environment Variables
+### Core Services:
+- **Frontend** (React/Next.js) - User interface
+- **Backend** (Node.js/Express) - API server
+- **PostgreSQL** - Main database with pgvector extension
+- **Redis** - Caching and session storage
 
-Create `.env` files in backend and frontend directories:
+### Additional Services:
+- **Dashboard Frontend** - Admin interface
+- **Dashboard Backend** - Admin API
+- **MCP Server** - Model Context Protocol server
+- **Analysis Engine** - Question analysis service
+- **Validator** - Data validation service
+- **Ollama** - Local AI model server
+- **Prometheus** - Metrics collection
 
-**Backend `.env`:**
-```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/masterminds
-REDIS_URL=redis://localhost:6379
-JWT_SECRET=your-super-secret-jwt-key
-JWT_REFRESH_SECRET=your-refresh-secret
-STRIPE_SECRET_KEY=sk_test_your_stripe_key
-STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
-OPENAI_API_KEY=your-openai-api-key
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-FRONTEND_URL=http://localhost:10021
-NODE_ENV=development
-```
+## 🚀 Features
 
-**Frontend environment variables:**
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
-NEXT_PUBLIC_WS_URL=ws://localhost:3001
-```
+- **Q&A System**: Ask questions, provide expert answers
+- **Bounty System**: Set rewards for high-quality answers
+- **AI Fallback**: Automatic AI answers when no expert responds
+- **Real-time Updates**: Live notifications and activity feeds
+- **Expert Routing**: AI-powered matching of questions to experts
+- **Payment Processing**: Secure escrow system for bounties
+- **Reputation System**: Community-driven expert ranking
 
-### Installation & Setup
+## 🔧 Manual Setup (Advanced Users)
 
-1. **Clone and install dependencies:**
+If you prefer to run commands manually or need to customize the setup:
+
+### 1. Clone and Setup
 ```bash
+git clone <repository-url>
 cd kondon
-cd backend && npm install
-cd ../frontend && npm install
 ```
 
-2. **Start infrastructure services:**
+### 2. Build and Start Services
 ```bash
-# Start PostgreSQL and Redis with Docker
-docker-compose up postgres redis -d
+# Build all images
+docker-compose build
+
+# Start all services
+docker-compose up -d
+
+# View logs (optional)
+docker-compose logs -f
 ```
 
-3. **Run database migrations:**
+### 3. Stop Services
 ```bash
-cd backend
-npm run migration:run
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (clean reset)
+docker-compose down -v
 ```
 
-4. **Seed database (optional):**
+## 🐛 Troubleshooting
+
+### Common Issues:
+
+1. **Docker Desktop not running**
+   - Solution: Start Docker Desktop and wait for it to fully load
+
+2. **Port conflicts**
+   - Check if ports 3001, 10021, 5433, or 6379 are in use
+   - Stop other services using these ports
+
+3. **Services not starting**
+   - Run: `docker-compose down` then `docker-compose up -d`
+   - Check logs: `docker-compose logs -f [service-name]`
+
+4. **Frontend compilation errors**
+   - The system will automatically resolve missing dependencies
+   - Wait a few minutes for the build to complete
+
+5. **Database connection issues**
+   - Ensure PostgreSQL container is healthy: `docker-compose ps`
+   - Restart if needed: `docker-compose restart postgres`
+
+### Useful Commands:
+
 ```bash
-# Run the seeder to populate with test data
-npm run seed
+# Check service status
+docker-compose ps
+
+# View logs for specific service
+docker-compose logs -f frontend
+docker-compose logs -f backend
+
+# Restart specific service
+docker-compose restart frontend
+
+# Rebuild specific service
+docker-compose build --no-cache frontend
+
+# Clean restart (removes all data)
+docker-compose down -v && docker-compose up -d
 ```
 
-5. **Start development servers:**
-```bash
-# Terminal 1: Backend
-cd backend
-npm run start:dev
+## 🔍 Service Health Checks
 
-# Terminal 2: Frontend
-cd frontend
-npm run dev
+You can verify services are running properly:
+
+- **Frontend**: Visit http://localhost:10021 - should show the main page
+- **Backend**: Visit http://localhost:3001/health - should return OK
+- **Database**: Check `docker-compose ps` - postgres should show "healthy"
+- **Redis**: Check `docker-compose ps` - redis should show "healthy"
+
+## 📁 Project Structure
+
+```
+kondon/
+├── frontend/          # React/Next.js frontend
+├── backend/           # Node.js/Express backend
+├── dashboard-frontend/# Admin dashboard (React)
+├── dashboard-backend/ # Admin API (Python/FastAPI)
+├── services/          # Additional microservices
+├── docker-compose.yml # Docker orchestration
+├── start.bat         # Windows start script
+├── stop.bat          # Windows stop script
+└── README.md         # This file
 ```
 
-### Development Commands
+## 🚦 Development
 
-**Backend:**
-```bash
-npm run start:dev          # Development server
-npm run build             # Production build
-npm run lint              # ESLint with auto-fix
-npm run format            # Prettier formatting
-npm run test              # Unit tests
-npm run test:e2e          # E2E tests
-npm run migration:generate # Generate migration
-npm run migration:run     # Run migrations
-```
+### Making Changes:
+1. Make your code changes in the respective directories
+2. For frontend changes: The development server will auto-reload
+3. For backend changes: The development server will auto-restart
+4. For major changes: Rebuild the container
+   ```bash
+   docker-compose build [service-name]
+   docker-compose up -d [service-name]
+   ```
 
-**Frontend:**
-```bash
-npm run dev               # Development server (port 10021)
-npm run build             # Production build
-npm run lint              # Next.js linting
-```
+### Database Changes:
+- Database schema and seed data are automatically applied on startup
+- For clean database: `docker-compose down -v && docker-compose up -d`
 
-## 📡 API Endpoints
+## 📊 Monitoring
 
-### GraphQL API
-- **Endpoint**: `http://localhost:3001/graphql`
-- **Playground**: Available in development mode
-- **Authentication**: Bearer token required (except public queries)
+- **Application Logs**: `docker-compose logs -f`
+- **Prometheus Metrics**: http://localhost:9090 (if enabled)
+- **Database**: Connect using any PostgreSQL client to `localhost:5433`
 
-### REST Endpoints
-- **Stripe Webhooks**: `POST /payments/webhooks/stripe`
-- **Health Check**: `GET /api/health`
+## 🔐 Security Notes
 
-### WebSocket
-- **Endpoint**: `ws://localhost:3001/live`
-- **Authentication**: JWT token required
-- **Events**: Real-time notifications, presence, typing indicators
+- This setup is for development only
+- Default passwords are used - change them for production
+- All services are accessible on localhost only
 
-## 🏗️ Database Schema
+## 📞 Support
 
-### Core Entities
-- **Users**: Authentication, profile, reputation
-- **Groups**: Expert categories with membership levels  
-- **Questions**: Q&A content with bounties and embeddings
-- **Answers**: Response content with quality scoring
-- **Votes**: Community voting on questions/answers
-- **EscrowTransactions**: Bounty payment management
-- **ReputationEvents**: Point history tracking
-- **SemanticRoutes**: AI-powered expert routing
+If you encounter issues:
 
-### Key Relationships
-```
-Users ←→ UserGroupMemberships ←→ Groups
-Users → Questions → Answers
-Users → Votes → Questions/Answers
-Users → EscrowTransactions ← Questions
-Questions → SemanticRoutes → Users (experts)
-```
+1. Check the troubleshooting section above
+2. Verify Docker Desktop is running and healthy
+3. Check service logs for error messages
+4. Try a clean restart with `stop.bat` then `start.bat`
 
-## 🔐 Authentication & Authorization
+## 📝 Additional Notes
 
-### Authentication Methods
-1. **Email/Password** with JWT tokens
-2. **Google OAuth** integration
-3. **Two-Factor Authentication** (2FA) with TOTP
-
-### Role-Based Access Control
-- **User**: Basic platform access
-- **Expert**: High reputation users (1000+ points)
-- **Moderator**: Group management permissions
-- **Admin**: Full platform administration
-
-### Security Features
-- Password strength validation
-- Rate limiting with throttling
-- JWT token expiration and refresh
-- Secure password hashing with bcrypt
-- 2FA with backup codes
-
-## 💰 Payment System
-
-### Stripe Integration
-- **Payment Intents** for secure payment collection
-- **Stripe Connect** for expert payouts
-- **Webhook Events** for real-time payment updates
-- **Escrow System** for bounty management
-
-### Escrow Workflow
-1. Question author creates bounty
-2. Payment held in escrow
-3. Expert provides answer
-4. Author accepts answer
-5. Payment released to expert (minus 5% platform fee)
-
-## 🤖 AI Features
-
-### OpenAI Integration
-- **Text Embeddings** for semantic search
-- **Answer Generation** with GPT-4
-- **Content Quality Assessment**
-- **Expert Routing** based on similarity
-
-### Semantic Search
-- Vector-based question/answer similarity
-- Real-time content embeddings
-- Contextual expert matching
-- Related content suggestions
-
-## 🔄 Real-time Features
-
-### WebSocket Events
-- **Notifications**: Question/answer/vote events
-- **Presence**: User online/offline status
-- **Activity**: Live question viewing
-- **Typing**: Real-time typing indicators
-- **Payments**: Bounty completion alerts
-
-### Live Updates
-- Question and answer creation
-- Vote changes and reputation updates
-- Expert routing notifications
-- Payment status changes
-
-## 🧪 Testing Strategy
-
-### Backend Testing
-- **Unit Tests**: Service layer logic
-- **Integration Tests**: API endpoints
-- **E2E Tests**: Complete user workflows
-- **Database Tests**: Repository operations
-
-### Frontend Testing
-- **Component Tests**: React component behavior
-- **Integration Tests**: API communication
-- **E2E Tests**: User interface workflows
-
-## 🚀 Deployment
-
-### Docker Deployment
-```bash
-# Build and start all services
-docker-compose up --build
-
-# Production deployment
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-### Environment Setup
-1. Configure production environment variables
-2. Set up PostgreSQL with pgvector extension
-3. Configure Redis for session management
-4. Set up Stripe webhooks endpoint
-5. Configure OpenAI API access
-
-### Infrastructure Requirements
-- **Database**: PostgreSQL 14+ with pgvector
-- **Cache**: Redis 6+
-- **CDN**: For static assets (recommended)
-- **SSL**: HTTPS certificate for production
-
-## 📈 Monitoring & Analytics
-
-### Application Metrics
-- User activity and engagement
-- Question/answer quality scores
-- Payment transaction success rates
-- AI confidence scores and accuracy
-
-### Performance Monitoring
-- API response times
-- Database query performance
-- WebSocket connection health
-- Payment processing latency
-
-## 🔧 Configuration
-
-### Feature Flags
-- AI answer generation toggle
-- Payment system enable/disable
-- Real-time notifications toggle
-- Expert routing automation
-
-### Customization Options
-- Platform fee percentage
-- Reputation scoring weights
-- AI confidence thresholds
-- Auto-escrow release timing
-
-## 📚 API Documentation
-
-### GraphQL Schema
-The GraphQL schema is auto-generated and available at `/graphql` in development mode. Key query and mutation types include:
-
-**Authentication:**
-- `login`, `register`, `refreshToken`
-- `enable2FA`, `verify2FA`, `me`
-
-**Content Management:**
-- `questions`, `createQuestion`, `updateQuestion`
-- `answers`, `createAnswer`, `acceptAnswer`
-- `voteQuestion`, `voteAnswer`
-
-**Payment System:**
-- `createEscrow`, `releaseEscrow`, `refundEscrow`
-- `createPaymentIntent`, `stripeConnectStatus`
-
-**AI Features:**
-- `semanticSearch`, `generateAnswer`
-- `routeToExperts`, `findSimilarContent`
-
-## 🤝 Contributing
-
-### Development Workflow
-1. Fork the repository
-2. Create feature branch
-3. Implement changes with tests
-4. Run linting and tests
-5. Submit pull request
-
-### Code Standards
-- TypeScript strict mode enabled
-- ESLint + Prettier for code formatting
-- Comprehensive error handling
-- Input validation with class-validator
-- Documentation for public APIs
-
-## 📄 License
-
-MIT License - see LICENSE file for details.
+- **First startup** may take 5-10 minutes as Docker downloads and builds images
+- **Subsequent startups** are much faster (30-60 seconds)
+- The system uses **hot reloading** for development - changes are reflected immediately
+- All data is persisted in Docker volumes and will survive container restarts
 
 ---
 
-## 🎯 Implementation Status
-
-✅ **Completed Features:**
-- Complete backend API with GraphQL
-- Authentication system with 2FA
-- Payment & escrow system  
-- AI-powered semantic search
-- Real-time WebSocket features
-- Database schema & migrations
-
-🚧 **In Progress:**
-- Frontend UI implementation
-- Comprehensive test coverage
-
-📋 **Next Steps:**
-- Frontend integration with backend API
-- E2E testing setup
-- Performance optimization
-- Production deployment guide
-
----
-
-*Built with ❤️ using NestJS, Next.js, and modern web technologies*
+*Happy coding! 🎉*

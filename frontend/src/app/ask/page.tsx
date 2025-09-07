@@ -64,7 +64,7 @@ export default function AskQuestionPage() {
 
       await createQuestion({
         variables: {
-          createQuestionDto: {
+          input: {
             title: title.trim(),
             content: content.trim(),
             tags: tags.length > 0 ? tags : undefined,
